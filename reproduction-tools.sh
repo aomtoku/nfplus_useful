@@ -8,12 +8,15 @@ ifname1="eth2"
 
 NF_REPO="${HOME}/NetFPGA-100G-alpha"
 xilinx_path="/opt/Xilinx/Vivado/2019.2/settings64.sh"
+device="au280"
 
-bitfile_sw="${HOME}/reference_switch_au280_new.bit"
-bitfile_sw_lite="${HOME}/reference_switch_lite_au280_new.bit"
-bitfile_nic="${HOME}/reference_nic_au280_new.bit"
-bitfile_router="${HOME}/reference_router_au280_new.bit"
-
+bitfile_sw="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
+bitfile_sw_lite="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
+bitfile_nic="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
+bitfile_router="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
+############################################################
+# Internal parameters
+############################################################
 me_dir=$(cd $(dirname $0); pwd)
 rescan_sh="${me_dir}/pci_rescan_run.sh"
 ############################################################
@@ -94,16 +97,27 @@ fi
 if [ ! -d ${NF_REPO} ]; then
 	echo "Error: ${NF_REPO} not found."
 	echo "Please check NF_REPO variable on this script."
+	exit -1
 fi
 
 if [ ! -d ${xilinx_path} ]; then
 	echo "Error: ${xilinx_path} not found."
 	echo "Please check xilinx_path variable on this script."
+	exit -1
 fi
 
 if [ ! -f ${bitfile} ]; then
 	echo "Error: ${bitfile} not found."
 	echo "Please check bitfile PATH on this script."
+	exit -1
+fi
+
+if [ ! -f ${NF_REPO}/sw/app/rwaxi ]; then
+	cd ${NF_REPO}/sw/app/rwaxi && make
+fi
+
+if [ -z ${XILINX_VIVADO} ]; then
+	source ${xilinx_path}
 fi
 
 for scenario_data in "${scenario[@]}" ; do
