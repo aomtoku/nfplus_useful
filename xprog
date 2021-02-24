@@ -5,7 +5,7 @@ DEFAULT_HOST="localhost:3121"
 DEFAULT_BOARD="SUME"
 #DEFAULT_BOARD="VC709"
 #DEFAULT_BOARD="ZYBO"
-vivado="/opt/Xilinx/Vivado/2019.1/bin/vivado"
+vivado="${XILINX_VIVADO}/bin/vivado"
 
 
 function flash {
