@@ -8,9 +8,16 @@ if [ ! -d ${nfplus} ]; then
 	echo "Please check NF_REPO variable on this script."
 fi
 
-if [ ! -d ${vivado} ]; then
-	echo "Error: ${vivado} not found."
-	echo "Please check xilinx_path variable on this script."
+if [ ! -f ${vivado} ]; then
+	if [ -f /tools/Xilinx/Vivado/2019.2/settings64.sh ]; then
+		vivado="/tools/Xilinx/Vivado/2019.2/settings64.sh"
+	elif [ -f /opt/Xilinx/Vivado/2019.2/settings64.sh ]; then
+		vivado="/opt/Xilinx/Vivado/2019.2/settings64.sh"
+	else
+		echo "Error: ${vivado} not found."
+		echo "Please check xilinx_path variable on this script."
+		exit -1
+	fi
 fi
 
 source $vivado
