@@ -69,6 +69,7 @@ function load_driver(){
 		if [ ! -f ${NF_REPO}/sw/driver/OpenNIC/onic.ko ]; then
 			cd ${NF_REPO}/sw/driver && make clean && make
 		fi
+		echo "Loading driver..."
 		sudo insmod ${NF_REPO}/sw/driver/OpenNIC/onic.ko
 	fi
 }
@@ -177,8 +178,8 @@ for scenario_data in "${scenario[@]}" ; do
 		echo "please reboot machine"
 		exit -1
 	fi
+	sleep 1
 	echo ""
-	echo "Loading driver..."
 	load_driver
 	sleep 1
 	echo ""
