@@ -64,7 +64,8 @@ function network_setup(){
 }
 
 function load_driver(){
-	if [ ! test -n "$(grep -e onic /proc/modules)" ]; then
+	onic_mod=$(grep -e onic /proc/modules)
+	if [ -z "${onic_mod}" ]; then
 		if [ ! -f ${NF_REPO}/sw/driver/OpenNIC/onic.ko ]; then
 			cd ${NF_REPO}/sw/driver && make clean && make
 		fi
@@ -172,7 +173,7 @@ for scenario_data in "${scenario[@]}" ; do
 	echo ""
 	echo "Rescanning PCIe device"
 	check_seq=$(sudo bash ${rescan_sh} | grep "Check programming FPGA or Reboot machine !")
-	if [ -z ${check_seq} ]; then
+	if [ -z "${check_seq}" ]; then
 		echo "please reboot machine"
 		exit -1
 	fi
