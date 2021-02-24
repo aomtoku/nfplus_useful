@@ -173,8 +173,7 @@ for scenario_data in "${scenario[@]}" ; do
 	echo ""
 	echo "Rescanning PCIe device"
 	check_seq=$(sudo bash ${rescan_sh} | grep "Check programming FPGA or Reboot machine !")
-	echo "${check_seq}"
-	if [ -z "${check_seq}" ]; then
+	if [ ! -z "${check_seq}" ]; then
 		echo "please reboot machine"
 		exit -1
 	fi
