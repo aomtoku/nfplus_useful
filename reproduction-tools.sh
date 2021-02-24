@@ -100,7 +100,7 @@ if [ ! -d ${NF_REPO} ]; then
 	exit -1
 fi
 
-if [ ! -d ${xilinx_path} ]; then
+if [ ! -f ${xilinx_path} ]; then
 	echo "Error: ${xilinx_path} not found."
 	echo "Please check xilinx_path variable on this script."
 	exit -1
