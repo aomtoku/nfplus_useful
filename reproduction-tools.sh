@@ -102,6 +102,10 @@ case $arg in
 esac
 done
 
+bitfile_sw="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
+bitfile_sw_lite="${NF_REPO}/hw/projects/reference_switch_lite/bitfiles/reference_switch_lite_${device}.bit"
+bitfile_nic="${NF_REPO}/hw/projects/reference_nic/bitfiles/reference_nic_${device}.bit"
+bitfile_router="${NF_REPO}/hw/projects/reference_router/bitfiles/reference_router_${device}.bit"
 
 if [ -z $target ]; then
 	echo "Error: please specify 1 augument"
@@ -137,9 +141,15 @@ if [ ! -d ${NF_REPO} ]; then
 fi
 
 if [ ! -f ${xilinx_path} ]; then
-	echo "Error: ${xilinx_path} not found."
-	echo "Please check xilinx_path variable on this script."
-	exit -1
+	if [ -f /tools/Xilinx/Vivado/2019.2/settings64.sh ]; then
+		xilinx_path="/tools/Xilinx/Vivado/2019.2/settings64.sh"
+	elif [ -f /opt/Xilinx/Vivado/2019.2/settings64.sh ]; then
+		xilinx_path="/opt/Xilinx/Vivado/2019.2/settings64.sh"
+	else
+		echo "Error: ${xilinx_path} not found."
+		echo "Please check xilinx_path variable on this script."
+		exit -1
+	fi
 fi
 
 if [ ! -f ${bitfile} ]; then
