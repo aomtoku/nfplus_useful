@@ -11,9 +11,9 @@ xilinx_path="/opt/Xilinx/Vivado/2019.2/settings64.sh"
 device="au280"
 
 bitfile_sw="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
-bitfile_sw_lite="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
-bitfile_nic="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
-bitfile_router="${NF_REPO}/hw/projects/reference_switch/bitfiles/reference_switch_${device}.bit"
+bitfile_sw_lite="${NF_REPO}/hw/projects/reference_switch_lite/bitfiles/reference_switch_lite_${device}.bit"
+bitfile_nic="${NF_REPO}/hw/projects/reference_nic/bitfiles/reference_nic_${device}.bit"
+bitfile_router="${NF_REPO}/hw/projects/reference_router/bitfiles/reference_router_${device}.bit"
 ############################################################
 # Internal parameters
 ############################################################
@@ -49,7 +49,11 @@ nic_scenario=(
 )
 
 function usage(){
-	echo "./reproduction-test <switch|switch_lite|nic|router>"
+	echo "./reproduction-test "
+	echo "         -t|--target <switch|switch_lite|nic|router>"
+	echo "         -d|--device <au280|au250|au200|vcu1525>"
+	echo "         -p|--prefix path to NetFPGA-PLUS directory"
+	echo ""
 }
 
 function network_setup(){
@@ -60,7 +64,7 @@ function network_setup(){
 }
 
 function load_driver(){
-	if [! test -n "$(grep -e onic /proc/modules)" ]; then
+	if [ ! test -n "$(grep -e onic /proc/modules)" ]; then
 		if [ ! -f ${NF_REPO}/sw/driver/OpenNIC/onic.ko ]; then
 			cd ${NF_REPO}/sw/driver && make clean && make
 		fi
@@ -68,24 +72,56 @@ function load_driver(){
 	fi
 }
 
-if [ -z $1 ]; then
+while [[ $# -gt 0 ]]
+do
+arg="$1"
+case $arg in
+	-d|--device)
+	device="$2"
+	shift # past argument
+	shift # past value
+	;;
+	-t|--target)
+	target="$2"
+	shift # past argument
+	shift # past value
+	;;
+	-p|--prefix)
+	NF_REPO="$2"
+	shift # past argument
+	shift # past value
+	;;
+	--default)
+	DEFAULT=YES
+	shift # past argument
+	;;
+	*)    # unknown option
+	POSITIONAL+=("$1") # save it in an array for later
+	shift # past argument
+	;;
+esac
+done
+
+
+if [ -z $target ]; then
 	echo "Error: please specify 1 augument"
 	usage
+	exit -1
 fi
 
-if [ $1 = "switch" ]; then
+if [ $target = "switch" ]; then
 	scenario=("${sw_scenario[@]}")
 	bitfile=${bitfile_sw}
 	proj="reference_switch"
-elif [ $1 = "switch_lite" ]; then
+elif [ $target = "switch_lite" ]; then
 	scenario=("${sw_scenario[@]}")
 	bitfile=${bitfile_sw_lite}
 	proj="reference_switch_lite"
-elif [ $1 = "nic" ]; then
+elif [ $target = "nic" ]; then
 	scenario=("${nic_scenario[@]}")
 	bitfile=${bitfile_nic}
 	proj="reference_nic"
-elif [ $1 = "router" ]; then
+elif [ $target = "router" ]; then
 	scenario=("${router_scenario[@]}")
 	bitfile=${bitfile_router}
 	proj="reference_router"
