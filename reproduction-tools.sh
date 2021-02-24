@@ -168,10 +168,14 @@ fi
 
 for scenario_data in "${scenario[@]}" ; do
 	echo "Loading bitfile ${bitfile} ..."
-	${HOME}/xprog load ${bitfile}
+	${me_dir}/xprog load ${bitfile}
 	echo ""
 	echo "Rescanning PCIe device"
-	sudo bash ${rescan_sh}
+	check_seq=$(sudo bash ${rescan_sh} | grep "Check programming FPGA or Reboot machine !")
+	if [ -z ${check_seq} ]; then
+		echo "please reboot machine"
+		exit -1
+	fi
 	echo ""
 	echo "Loading driver..."
 	load_driver
