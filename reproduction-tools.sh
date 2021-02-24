@@ -113,7 +113,7 @@ if [ ! -f ${bitfile} ]; then
 fi
 
 if [ ! -f ${NF_REPO}/sw/app/rwaxi ]; then
-	cd ${NF_REPO}/sw/app/rwaxi && make
+	cd ${NF_REPO}/sw/app/ && make
 fi
 
 if [ -z ${XILINX_VIVADO} ]; then
