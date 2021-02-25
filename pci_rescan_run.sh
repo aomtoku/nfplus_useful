@@ -58,7 +58,7 @@ do
 		echo
 		echo "Completed rescan PCIe information !"
 		echo
-		bus0="pass"
+		bus1="pass"
 	fi
 done
 
