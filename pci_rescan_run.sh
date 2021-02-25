@@ -32,7 +32,8 @@
 
 PcieBusPath=/sys/bus/pci/devices
 PcieDeviceList=`ls /sys/bus/pci/devices/`
-
+bus0="fail"
+bus1="fail"
 for BusNo in $PcieDeviceList
 do	
 	VenderId=`cat $PcieBusPath/$BusNo/device`
@@ -43,7 +44,7 @@ do
 		echo
 		echo "Completed rescan PCIe information !"
 		echo
-		exit 1
+		bus0="pass"
 	fi
 done
 
@@ -57,8 +58,10 @@ do
 		echo
 		echo "Completed rescan PCIe information !"
 		echo
-		exit 1
+		bus0="pass"
 	fi
 done
 
-echo "Check programming FPGA or Reboot machine !"
+if [ $bus0 == "fail" ] | [ $bus1 == "fail" ]; then
+	echo "Check programming FPGA or Reboot machine !"
+fi
