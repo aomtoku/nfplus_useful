@@ -117,6 +117,16 @@ case $arg in
 	shift # past argument
 	shift # past value
 	;;
+	-M|--major)
+	major_arg="$2"
+	shift # past argument
+	shift # past value
+	;;
+	-m|--minor)
+	minor_arg="$2"
+	shift # past argument
+	shift # past value
+	;;
 	--default)
 	DEFAULT=YES
 	shift # past argument
@@ -192,7 +202,22 @@ if [ -z ${XILINX_VIVADO} ]; then
 	source ${xilinx_path}
 fi
 
+if [ -z "${major_arg}" ] | [ -z "${minor_arg}" ]; then
+	all="off"
+else
+	all="on"
+fi
+
 for scenario_data in "${scenario[@]}" ; do
+	d=(${scenario_data})
+	major=${d[0]}
+	minor=${d[1]}
+
+	if [ $all == "off" ]; then
+		if [ ${major} != ${major_arg} ] | [ ${minor} != ${minor_arg} ]; then
+			continue
+		fi
+	fi
 	echo "Loading bitfile ${bitfile} ..."
 	${me_dir}/xprog load ${bitfile}
 	echo ""
@@ -216,9 +241,6 @@ for scenario_data in "${scenario[@]}" ; do
 		echo "Setting up GT_LOOPBACK on CMAC1..."
 		${NF_REPO}/sw/app/rwaxi -a 0xc090 -w 1
 	fi
-	d=(${scenario_data})
-	major=${d[0]}
-	minor=${d[1]}
 	echo "major:$major minor:$minor"
 	cd $NF_REPO/tools/scripts/
 	sudo bash -c "source ${xilinx_path} && source ./../settings.sh && \
