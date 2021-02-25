@@ -61,25 +61,25 @@ function network_setup(){
 	nf1_if=$(ifconfig -a | grep nf1)
 	if0_if=$(ifconfig -a | grep $ifname0)
 	if1_if=$(ifconfig -a | grep $ifname1)
-	if [ -z $nf0_if ]; then
+	if [ -z "$nf0_if" ]; then
 		echo "Error: nf0 not found on network interface."
 		exit -1
 	else
 		sudo ifconfig nf0 up
 	fi
-	if [ -z $nf1_if ]; then
+	if [ -z "$nf1_if" ]; then
 		echo "Error: nf1 not found on network interface."
 		exit -1
 	else
 		sudo ifconfig nf1 up
 	fi
-	if [ -z $if0_if ]; then
+	if [ -z "$if0_if" ]; then
 		echo "Error: ${ifname0} not found on network interface."
 		exit -1
 	else
 		sudo ifconfig $ifname0 up
 	fi
-	if [ -z $if1_if ]; then
+	if [ -z "$if1_if" ]; then
 		echo "Error: ${ifname0} not found on network interface."
 		exit -1
 	else
