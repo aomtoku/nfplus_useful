@@ -214,7 +214,7 @@ for scenario_data in "${scenario[@]}" ; do
 	minor=${d[1]}
 
 	if [ $all == "off" ]; then
-		if [ ${major} != ${major_arg} ] | [ ${minor} != ${minor_arg} ]; then
+		if [[ ${major} != ${major_arg} ]] | [[ ${minor} != ${minor_arg} ]]; then
 			continue
 		fi
 	fi
