@@ -127,6 +127,11 @@ case $arg in
 	shift # past argument
 	shift # past value
 	;;
+	-u|--unit)
+	unit_arg="$2"
+	shift # past argument
+	shift # past value
+	;;
 	--default)
 	DEFAULT=YES
 	shift # past argument
@@ -147,6 +152,14 @@ if [ -z $target ]; then
 	echo "Error: please specify 1 augument"
 	usage
 	exit -1
+fi
+
+if [ -z "$unit_arg" ]; then
+	unit="hw"
+elif [ ${unit_arg} = "hw" ]; then
+	unit="hw"
+elif [ ${unit_arg} = "sim" ]; then
+	unit="sim"
 fi
 
 if [ $target = "switch" ]; then
@@ -218,34 +231,42 @@ for scenario_data in "${scenario[@]}" ; do
 			continue
 		fi
 	fi
-	echo "Loading bitfile ${bitfile} ..."
-	${me_dir}/xprog load ${bitfile}
-	echo ""
-	echo "Rescanning PCIe device"
-	check_seq=$(sudo bash ${rescan_sh} | grep "Check programming FPGA or Reboot machine !")
-	if [ ! -z "${check_seq}" ]; then
-		echo "please reboot machine"
-		exit -1
-	fi
-	sleep 1
-	echo ""
-	load_driver
-	sleep 1
-	echo ""
-	echo "Network Setup..."
-	network_setup
+	if [ ${unit} = "hw" ]; then
+		echo "Loading bitfile ${bitfile} ..."
+		${me_dir}/xprog load ${bitfile}
+		echo ""
+		echo "Rescanning PCIe device"
+		check_seq=$(sudo bash ${rescan_sh} | grep "Check programming FPGA or Reboot machine !")
+		if [ ! -z "${check_seq}" ]; then
+			echo "please reboot machine"
+			exit -1
+		fi
+		sleep 1
+		echo ""
+		load_driver
+		sleep 1
+		echo ""
+		echo "Network Setup..."
+		network_setup
 
-	if [ ${proj} == "reference_nic" ]; then
-		echo "Setting up GT_LOOPBACK on CMAC0..."
-		${NF_REPO}/sw/app/rwaxi -a 0x8090 -w 1
-		echo "Setting up GT_LOOPBACK on CMAC1..."
-		${NF_REPO}/sw/app/rwaxi -a 0xc090 -w 1
+		if [ ${proj} == "reference_nic" ]; then
+			echo "Setting up GT_LOOPBACK on CMAC0..."
+			${NF_REPO}/sw/app/rwaxi -a 0x8090 -w 1
+			echo "Setting up GT_LOOPBACK on CMAC1..."
+			${NF_REPO}/sw/app/rwaxi -a 0xc090 -w 1
+		fi
+		echo "major:$major minor:$minor"
+		cd $NF_REPO/tools/scripts/
+		sudo bash -c "source ${xilinx_path} && source ./../settings.sh && \
+		     export NF_PROJECT_NAME=${proj} && \
+		     export NF_DESIGN_DIR=${NF_REPO}/hw/projects/${proj} &&
+		     ./nf_test.py hw --major $major --minor $minor"
+	else
+		cd $NF_REPO/tools/scripts/
+		bash -c "source ${xilinx_path} && source ./../settings.sh && \
+		     export NF_PROJECT_NAME=${proj} && \
+		     export NF_DESIGN_DIR=${NF_REPO}/hw/projects/${proj} &&
+		     ./nf_test.py sim --major $major --minor $minor"
 	fi
-	echo "major:$major minor:$minor"
-	cd $NF_REPO/tools/scripts/
-	sudo bash -c "source ${xilinx_path} && source ./../settings.sh && \
-	     export NF_PROJECT_NAME=${proj} && \
-	     export NF_DESIGN_DIR=${NF_REPO}/hw/projects/${proj} &&
-	     ./nf_test.py hw --major $major --minor $minor"
 done
 
