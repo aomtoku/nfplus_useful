@@ -216,9 +216,9 @@ if [ -z ${XILINX_VIVADO} ]; then
 fi
 
 if [ -z "${major_arg}" ] | [ -z "${minor_arg}" ]; then
-	all="off"
-else
 	all="on"
+else
+	all="off"
 fi
 
 for scenario_data in "${scenario[@]}" ; do
