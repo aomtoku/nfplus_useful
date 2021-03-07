@@ -54,8 +54,8 @@ make -C $NF_DESIGN_DIR/hw
 
 res_switch=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_switch/hw/vivado.log | tail -n 10 | grep -v "#")
 res_switch_lite=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_switch/hw/vivado.log | tail -n 10 | grep -v "#")
-res_nic=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_nic/hw/vivado.log | tail -n 10 | grep -v "#"
-res_router=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_router/hw/vivado.log | tail -n 10 | grep -v "#"
+res_nic=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_nic/hw/vivado.log | tail -n 10 | grep -v "#")
+res_router=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_router/hw/vivado.log | tail -n 10 | grep -v "#")
 
 echo "All task was done..."
 echo "reference_switch:"
