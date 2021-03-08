@@ -53,6 +53,9 @@ function usage(){
 	echo "         -t|--target <switch|switch_lite|nic|router>"
 	echo "         -d|--device <au280|au250|au200|vcu1525>"
 	echo "         -p|--prefix path to NetFPGA-PLUS directory"
+	echo "         -M|--major  name of major on script"
+	echo "         -m|--minor  name of minor on script"
+	echo "         -u|--unit   <sim|hw>"
 	echo ""
 }
 
