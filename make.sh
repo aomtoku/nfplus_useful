@@ -34,24 +34,28 @@ export NF_DESIGN_DIR=${NFPLUS_FOLDER}/hw/projects/${NF_PROJECT_NAME}
 
 make -C $NF_DESIGN_DIR/hw clean
 make -C $NF_DESIGN_DIR/hw
+cp $NF_DESIGN_DIR/hw/vivado.log ${NF_PROJECT_NAME}.log
 
 export NF_PROJECT_NAME=reference_switch_lite
 export NF_DESIGN_DIR=${NFPLUS_FOLDER}/hw/projects/${NF_PROJECT_NAME}
 
 make -C $NF_DESIGN_DIR/hw clean
 make -C $NF_DESIGN_DIR/hw
+cp $NF_DESIGN_DIR/hw/vivado.log ${NF_PROJECT_NAME}.log
 
 export NF_PROJECT_NAME=reference_nic
 export NF_DESIGN_DIR=${NFPLUS_FOLDER}/hw/projects/${NF_PROJECT_NAME}
 
 make -C $NF_DESIGN_DIR/hw clean
 make -C $NF_DESIGN_DIR/hw
+cp $NF_DESIGN_DIR/hw/vivado.log ${NF_PROJECT_NAME}.log
 
 export NF_PROJECT_NAME=reference_router
 export NF_DESIGN_DIR=${NFPLUS_FOLDER}/hw/projects/${NF_PROJECT_NAME}
 
 make -C $NF_DESIGN_DIR/hw clean
 make -C $NF_DESIGN_DIR/hw
+cp $NF_DESIGN_DIR/hw/vivado.log ${NF_PROJECT_NAME}.log
 
 res_switch=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_switch/hw/vivado.log | tail -n 10 | grep -v "#")
 res_switch_lite=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_switch/hw/vivado.log | tail -n 10 | grep -v "#")
