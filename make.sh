@@ -1,7 +1,8 @@
 #!/bin/bash
 
+vivado_ver="2020.2"
 nfplus="${HOME}/NetFPGA-100G-alpha"
-vivado="/opt/Xilinx/Vivado/2019.2/settings64.sh"
+vivado="/tools/Xilinx/Vivado/2020.2/settings64.sh"
 
 if [ ! -d ${nfplus} ]; then
 	echo "Error: ${nfplus} not found."
@@ -9,10 +10,10 @@ if [ ! -d ${nfplus} ]; then
 fi
 
 if [ ! -f ${vivado} ]; then
-	if [ -f /tools/Xilinx/Vivado/2019.2/settings64.sh ]; then
-		vivado="/tools/Xilinx/Vivado/2019.2/settings64.sh"
-	elif [ -f /opt/Xilinx/Vivado/2019.2/settings64.sh ]; then
-		vivado="/opt/Xilinx/Vivado/2019.2/settings64.sh"
+	if [ -f /tools/Xilinx/Vivado/${vivado_ver}/settings64.sh ]; then
+		vivado="/tools/Xilinx/Vivado/${vivado_ver}/settings64.sh"
+	elif [ -f /opt/Xilinx/Vivado/${vivado_ver}/settings64.sh ]; then
+		vivado="/opt/Xilinx/Vivado/${vivado_ver}/settings64.sh"
 	else
 		echo "Error: ${vivado} not found."
 		echo "Please check xilinx_path variable on this script."
@@ -54,8 +55,8 @@ make -C $NF_DESIGN_DIR/hw
 
 res_switch=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_switch/hw/vivado.log | tail -n 10 | grep -v "#")
 res_switch_lite=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_switch/hw/vivado.log | tail -n 10 | grep -v "#")
-res_nic=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_nic/hw/vivado.log | tail -n 10 | grep -v "#"
-res_router=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_router/hw/vivado.log | tail -n 10 | grep -v "#"
+res_nic=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_nic/hw/vivado.log | tail -n 10 | grep -v "#")
+res_router=$(cat ${NFPLUS_FOLDER}/hw/projects/reference_router/hw/vivado.log | tail -n 10 | grep -v "#")
 
 echo "All task was done..."
 echo "reference_switch:"
